@@ -744,6 +744,10 @@ NCCL_API ncclResult_t ncclAllGather(const void* sendbuff, void* recvbuff, size_t
                                     *reinterpret_cast<ncclComm_t*>(comm->mscclppNcclComm), stream);
   }
 
+  if (datatype == ncclInt64 || datatype == ncclUint64) {
+    return mscclppNcclOps.AllGather(sendbuff, recvbuff, sendcount, datatype,
+                                    *reinterpret_cast<ncclComm_t*>(comm->mscclppNcclComm), stream);
+  }
   mscclpp::DataType dtype = ncclDataTypeToMscclpp(datatype);
   mscclpp::CollectiveRequest request = {.worldSize = comm->worldSize,
                                         .nRanksPerNode = comm->nRanksPerNode,
